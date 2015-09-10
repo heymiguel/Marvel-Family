@@ -1,4 +1,4 @@
-	// %%%%%%%%%%%%%%%%%%%%%%%%%% begin JS notes
+// %%%%%%%%%%%%%%%%%%%%%%%%%% begin JS notes
 // 1) get birthdate from user (that's a range, ideally)
 // 2) use birthday to access marvel API for comics sold on that day
 // 3) return the first 4 or something like that character names
@@ -19,7 +19,6 @@ latveria.comicCharactersUrl		= 'http://gateway.marvel.com/v1/public/characters';
 latveria.cvApi					= 'fcbfe62dae6df2e5cbe7cd002a7e5fd4df1a961e';
 latveria.cvURLCharacters		= 'www.comicvine.com/api/characters';
 latveria.realName				= "";
-// latveria.comicDate  			= '1993-04-05,1993-04-30';
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% listeners
 
@@ -37,7 +36,6 @@ latveria.takeDate = function(){//takes user input and shoves it into function th
 		latveria.dateConverter(latveria.selectedMonth, latveria.selectedDay, latveria.selectedYear);
 		latveria.typer();
 	});
-
 };
 
 latveria.outputUpdate = function(){
@@ -67,8 +65,6 @@ latveria.socialListener = function(){
 
 	  //We trigger a new window with the Twitter dialog, in the middle of the page
 	  window.open('http://twitter.com/share?url=' + loc + '&text=' + title + '&', 'twitterwindow', 'height=450, width=550, top='+($(window).height()/2 - 225) +', left='+$(window).width()/2 +', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
-
-
 
 	});
 };
@@ -105,7 +101,6 @@ latveria.dateConverter = function (month, day, year){//accepts takeDate input, s
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% page interactivity
 
 latveria.getComicInfo = function(processedDate){
-	
 	// takes the info from marvel APi
 	// also takes info from date function
 	// creates the initial array for manipulation
@@ -147,11 +142,6 @@ latveria.comicInfoSplitter = function(comicInfo){// takes an array and then grab
 			};
 	});
 
-	// for (var i = 0; i < comicInfo.length; i++){
-	// 	console.log (comicInfo[i].characters);
-	// 	console.log (comicInfo[i].characters.available);
-	// }
-	// console.log(comicInfo.length);
 	console.log(latveria.characterholder);//unfiltered
 	var sortedCharacters = _.uniq(latveria.characterholder);
 	var characterTotal 	 = sortedCharacters.length;
@@ -196,7 +186,6 @@ latveria.getCharacterInfo = function(characterNames, length){//finds thumbnails 
 					};
 					latveria.realName = charName;
 					latveria.builder(charName, charImagePath, charDesc);
-					
 				}
 			});
 		}
@@ -231,26 +220,8 @@ latveria.getCharacterInfo = function(characterNames, length){//finds thumbnails 
 
 };
 
-// latveria.missingDescription = function (characterName){
-// 	$.ajax({
-// 		url: latveria.cvURLCharacters,
-// 		type: 'GET',
-// 		data:{
-// 			apikey: latveria.cvApi,
-// 			name: characterName
-// 		},
-// 		success: function(newCharName){
-// 			var newName		= (rawCharacterNames.data.results[0].description);
-// 			console.log(rawCharacterNames);
-// 			console.log(charDesc.length);
-// 			if (charDesc === "") {
-// 					charDesc = "No description in the marvel Database.";
-// 			};
 
-// 			latveria.displayInfo(charImagePath, charName, charDesc);
-// 		}
-// 	});
-// }
+
 
 latveria.builder = function(name, image, description){
 		//create all the divs.
@@ -277,7 +248,6 @@ latveria.displayInfo = function(characterName, imagePath,  description){ //accep
 		$('.congratulations').slideDown(700)
 		$('a.tweet').slideDown(1000);
 };
-
 
 
 latveria.tweetBuilder = function (nameList){
