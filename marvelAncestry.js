@@ -1,4 +1,4 @@
-// %%%%%%%%%%%%%%%%%%%%%%%%%% begin JS notes
+	// %%%%%%%%%%%%%%%%%%%%%%%%%% begin JS notes
 // 1) get birthdate from user (that's a range, ideally)
 // 2) use birthday to access marvel API for comics sold on that day
 // 3) return the first 4 or something like that character names
@@ -18,6 +18,7 @@ latveria.comicCharactersUrl		= 'http://gateway.marvel.com/v1/public/characters';
 // %%%%%%%%%%%%%%%%%%%%%%%%%% CV stuff
 latveria.cvApi					= 'fcbfe62dae6df2e5cbe7cd002a7e5fd4df1a961e';
 latveria.cvURLCharacters		= 'www.comicvine.com/api/characters';
+latveria.realName				= "";
 // latveria.comicDate  			= '1993-04-05,1993-04-30';
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% listeners
@@ -32,6 +33,7 @@ latveria.takeDate = function(){//takes user input and shoves it into function th
 		latveria.selectedDay	= $('#getDay').val();
 		latveria.selectedYear	= $('#getYear').val();
 		console.log(latveria.selectedMonth, latveria.selectedDay, latveria.selectedYear);
+		console.log("entering date");
 		latveria.dateConverter(latveria.selectedMonth, latveria.selectedDay, latveria.selectedYear);
 		latveria.typer();
 	});
@@ -89,6 +91,7 @@ latveria.dateConverter = function (month, day, year){//accepts takeDate input, s
 		console.log("recalculating");
 		var convertedDate = year + "-" + month + "-" + "30" + "," + year + "-" + month + "-" + (convertedDay);
 		latveria.getComicInfo(convertedDate);
+		console.log("all good, normal!");
 	} else {
 		var convertedDate = year + "-" + month + "-" + day + "," + year + "-" + month + "-" + (convertedDay+1);
 		latveria.getComicInfo(convertedDate);
@@ -191,8 +194,9 @@ latveria.getCharacterInfo = function(characterNames, length){//finds thumbnails 
 							charDesc = "Marvel.com does not have a description for this character. A description may be hosted at the marvel Wikia. ";
 
 					};
-
-					latveria.displayInfo(charImagePath, charName, charDesc);
+					latveria.realName = charName;
+					latveria.builder(charName, charImagePath, charDesc);
+					
 				}
 			});
 		}
@@ -217,8 +221,9 @@ latveria.getCharacterInfo = function(characterNames, length){//finds thumbnails 
 					if (charDesc === "") {
 							charDesc = "Marvel.com does not have a description for this character. A description may be hosted at the marvel Wikia. ";
 					};
-
-					latveria.displayInfo(charImagePath, charName, charDesc);
+					latveria.realName = charName;
+					latveria.builder(charName, charImagePath, charDesc);
+					
 				}
 			});
 		}
@@ -247,37 +252,33 @@ latveria.getCharacterInfo = function(characterNames, length){//finds thumbnails 
 // 	});
 // }
 
+latveria.builder = function(name, image, description){
+		//create all the divs.
+		$resultsHolder		= $('<div>'); 
+		$resultsHolder.addClass('resultsHolder clearfix');
+		var cleanName = name.replace(/\s+/g,'');
+		$resultsHolder.addClass(cleanName);
+		$('.resultsArea').append($resultsHolder);
+		latveria.displayInfo(cleanName, image, description);
+};
 
-
-
-latveria.displayInfo = function(imagePath, characterName, description){ //accepts the array of URLS and builds the result gallery into the HTML
+latveria.displayInfo = function(characterName, imagePath,  description){ //accepts the array of URLS and builds the result gallery into the HTML
 		//safetyspace for .addClass function
-		$title 				= $('<h3>').text(characterName);
+		$title 				= $('<h3>').text(latveria.realName);
 		$characterImage 	= $('<img>').attr('src', imagePath);
 		$characterDesc 		= $('<p>').text(description);
 		$nameAndDesc		= $('<div>');
 		$resultsHolder		= $('<div>');
 
-		// $('.resultsArea').append($title, $characterImage, $characterDesc);
-
-
-		$resultsHolder.addClass('resultsHolder clearfix');
-		$('.resultsArea').append($resultsHolder);
-		console.log("red box applied!");
-		$nameAndDesc.addClass('nameAndDescription clearfix');
-		$('.resultsArea').append($characterImage);
-		$nameAndDesc.append($title, $characterDesc);
-		$('.resultsArea').append($nameAndDesc);
-
-
-		// $('.nameAndDescription').text($title,$characterDesc);
-		// $('#rightDescription').append($characterDesc);
+		$("."+characterName+"").append($characterImage, $title,  $characterDesc);
 
 		//cosmetics
 		$('.type-wrap').slideUp(700);
 		$('.congratulations').slideDown(700)
 		$('a.tweet').slideDown(1000);
 };
+
+
 
 latveria.tweetBuilder = function (nameList){
 	var name1 		= nameList[0];
